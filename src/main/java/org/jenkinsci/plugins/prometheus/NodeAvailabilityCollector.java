@@ -35,8 +35,9 @@ public class NodeAvailabilityCollector extends Collector {
 
     for (Computer node : jenkins.getComputers()) {
       nodeUpGauge.labels(node.getDisplayName()).set(node.isOnline() ? 1 : 0);
-      samples.addAll(nodeUpGauge.collect());
     }
+    samples.addAll(nodeUpGauge.collect());
+
     return samples;
   }
 }

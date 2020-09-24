@@ -12,6 +12,7 @@ import org.jenkinsci.plugins.prometheus.ExecutorCollector;
 import org.jenkinsci.plugins.prometheus.JenkinsStatusCollector;
 import org.jenkinsci.plugins.prometheus.JobCollector;
 import org.jenkinsci.plugins.prometheus.util.MetricsFormatter;
+import org.jenkinsci.plugins.prometheus.NodeAvailabilityCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,7 @@ public class DefaultPrometheusMetrics implements PrometheusMetrics {
         // other collectors from other plugins
         ExtensionList.lookup(Collector.class).forEach( c -> collectorRegistry.register(c));
 
+        collectorRegistry.register(new NodeAvailabilityCollector());
         DefaultExports.initialize();
 
         this.collectorRegistry = collectorRegistry;

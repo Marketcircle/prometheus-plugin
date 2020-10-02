@@ -2,6 +2,7 @@ package org.jenkinsci.plugins.prometheus;
 
 import hudson.model.Computer;
 import hudson.model.Node;
+import hudson.slaves.AbstractCloudComputer;
 import io.prometheus.client.Collector;
 import io.prometheus.client.Gauge;
 import jenkins.model.Jenkins;
@@ -32,8 +33,11 @@ public class NodeAvailabilityCollector extends Collector {
       .namespace(namespace)
       .subsystem(subsystem)
       .create();
-
+    
     for (Computer node : jenkins.getComputers()) {
+      if (node instanceof AbstractCloudComputer<?>) {
+        continue;
+      }
       nodeUpGauge.labels(node.getDisplayName()).set(node.isOnline() ? 1 : 0);
     }
     samples.addAll(nodeUpGauge.collect());
